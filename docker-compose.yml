@@ -12,27 +12,27 @@ services:
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     php:
         build:
-            context: php7-fpm
+            context: docker/php7-fpm
             args:
                 TIMEZONE: ${TIMEZONE}
         volumes:
-            - ${SYMFONY_APP_PATH}:/var/www/symfony
-            - ./logs/symfony:/var/www/symfony/var/logs
+            - ${SYMFONY_APP_PATH}:/var/www/${SYMFONY_APP_NAME}
+            - ./docker/logs/symfony:/var/www/${SYMFONY_APP_NAME}/var/logs
     nginx:
-        build: nginx
+        build: docker/nginx
         ports:
             - 80:80
         volumes_from:
             - php
         volumes:
-            - ./logs/nginx/:/var/log/nginx
+            - ./docker/logs/nginx/:/var/log/nginx
     elk:
         image: willdurand/elk
         ports:
             - 81:80
         volumes:
-            - ./elk/logstash:/etc/logstash
-            - ./elk/logstash/patterns:/opt/logstash/patterns
+            - ./docker/elk/logstash:/etc/logstash
+            - ./docker/elk/logstash/patterns:/opt/logstash/patterns
         volumes_from:
             - php
             - nginx
