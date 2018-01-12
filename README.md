@@ -22,11 +22,11 @@ Docker-symfony gives you everything you need for developing Symfony application.
     $ docker-compose up -d
     ```
 
-3. Update your system host file (add symfony.dev)
+3. Update your system host file (add www.symfony.localhost)
 
     ```bash
     # UNIX only: get containers IP address and update host (replace IP according to your configuration) (on Windows, edit C:\Windows\System32\drivers\etc\hosts)
-    $ sudo echo $(docker network inspect bridge | grep Gateway | grep -o -E '[0-9\.]+') "symfony.dev" >> /etc/hosts
+    $ sudo echo $(docker network inspect bridge | grep Gateway | grep -o -E '[0-9\.]+') "www.symfony.localhost" >> /etc/hosts
     ```
 
     **Note:** For **OS X**, please take a look [here](https://docs.docker.com/docker-for-mac/networking/) and for **Windows** read [this](https://docs.docker.com/docker-for-windows/#/step-4-explore-the-application-and-run-examples) (4th step).
@@ -45,16 +45,11 @@ Docker-symfony gives you everything you need for developing Symfony application.
         ```bash
         $ docker-compose exec php bash
         $ composer install
-        # Symfony2
-        $ sf doctrine:database:create
-        $ sf doctrine:schema:update --force
+        # Symfony4
+        $ sf4 doctrine:database:create
+        $ sf4 doctrine:schema:update --force
         # Only if you have `doctrine/doctrine-fixtures-bundle` installed
-        $ sf doctrine:fixtures:load --no-interaction
-        # Symfony3
-        $ sf3 doctrine:database:create
-        $ sf3 doctrine:schema:update --force
-        # Only if you have `doctrine/doctrine-fixtures-bundle` installed
-        $ sf3 doctrine:fixtures:load --no-interaction
+        $ sf4 doctrine:fixtures:load --no-interaction
         ```
 
 5. Enjoy :-)
@@ -63,9 +58,8 @@ Docker-symfony gives you everything you need for developing Symfony application.
 
 Just run `docker-compose up -d`, then:
 
-* Symfony app: visit [symfony.dev](http://symfony.dev)  
-* Symfony dev mode: visit [symfony.dev/app_dev.php](http://symfony.dev/app_dev.php)  
-* Logs (Kibana): [symfony.dev:81](http://symfony.dev:81)
+* Symfony app: visit [www.symfony.localhost](http://www.symfony.localhost)    
+* Logs (Kibana): [www.symfony.localhost:81](http://www.symfony.localhost:81)
 * Logs (files location): logs/nginx and logs/symfony
 
 ## Customize
@@ -117,8 +111,7 @@ $ docker inspect $(docker ps -f name=nginx -q) | grep IPAddress
 $ docker-compose exec db mysql -uroot -p"root"
 
 # F***ing cache/logs folder
-$ sudo chmod -R 777 app/cache app/logs # Symfony2
-$ sudo chmod -R 777 var/cache var/logs var/sessions # Symfony3
+$ sudo chmod -R 777 var/cache var/logs var/sessions # Symfony4
 
 # Check CPU consumption
 $ docker stats $(docker inspect -f "{{ .Name }}" $(docker ps -q))
@@ -141,9 +134,3 @@ Run `docker-compose up -d` instead.
 * How to config Xdebug?
 Xdebug is configured out of the box!
 Just config your IDE to connect port  `9001` and id key `PHPSTORM`
-
-## Contributing
-
-First of all, **thank you** for contributing ♥  
-If you find any typo/misconfiguration/... please send me a PR or open an issue. You can also ping me on [twitter](https://twitter.com/_maxpou).  
-Also, while creating your Pull Request on GitHub, please write a description which gives the context and/or explains why you are creating it.
